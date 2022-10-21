@@ -23,6 +23,10 @@ class CarouselOptions {
   /// Defaults to 0.
   final int initialPage;
 
+  ///If the value is not null, inactive carousel tiles will be partially transparent.
+  /// The larger the exponent, the smaller the opacity
+  final double? grayscaleExponent;
+
   ///Determines if carousel should loop infinitely or be limited to item length.
   ///
   ///Defaults to true, i.e. infinite loop.
@@ -146,6 +150,7 @@ class CarouselOptions {
     this.pauseAutoPlayInFiniteScroll: false,
     this.pageViewKey,
     this.enlargeStrategy: CenterPageEnlargeStrategy.scale,
+    this.grayscaleExponent,
     this.disableCenter: false,
     this.padEnds = true,
     this.clipBehavior: Clip.hardEdge,

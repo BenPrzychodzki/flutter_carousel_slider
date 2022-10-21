@@ -1,6 +1,7 @@
 library carousel_slider;
 
 import 'dart:async';
+import 'dart:math';
 
 import 'package:carousel_slider/carousel_state.dart';
 import 'package:flutter/gestures.dart';
@@ -228,6 +229,19 @@ class CarouselSliderState extends State<CarouselSlider>
     return Center(child: child);
   }
 
+  Widget getColorWrapper(
+    Widget? child, {
+    double? scale,
+    double? grayscaleExponent,
+  }) {
+    if (widget.options.grayscaleExponent != null) {
+      return Opacity(
+          opacity: pow(scale!, grayscaleExponent!).toDouble(),
+          child: Container(child: child));
+    }
+    return Container(child: child);
+  }
+
   Widget getEnlargeWrapper(Widget? child,
       {double? width, double? height, double? scale}) {
     if (widget.options.enlargeStrategy == CenterPageEnlargeStrategy.height) {
@@ -338,12 +352,27 @@ class CarouselSliderState extends State<CarouselSlider>
                     (1 / widget.options.aspectRatio);
 
             if (widget.options.scrollDirection == Axis.horizontal) {
-              return getCenterWrapper(getEnlargeWrapper(child,
-                  height: distortionValue * height, scale: distortionValue));
+              return getCenterWrapper(
+                getEnlargeWrapper(
+                  getColorWrapper(
+                    child,
+                    scale: distortionValue,
+                    grayscaleExponent: widget.options.grayscaleExponent,
+                  ),
+                  height: distortionValue * height,
+                  scale: distortionValue,
+                ),
+              );
             } else {
-              return getCenterWrapper(getEnlargeWrapper(child,
-                  width: distortionValue * MediaQuery.of(context).size.width,
-                  scale: distortionValue));
+              return getCenterWrapper(getEnlargeWrapper(
+                getColorWrapper(
+                  child,
+                  scale: distortionValue,
+                  grayscaleExponent: widget.options.grayscaleExponent,
+                ),
+                width: distortionValue * MediaQuery.of(context).size.width,
+                scale: distortionValue,
+              ));
             }
           },
         );
